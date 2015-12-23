@@ -24,24 +24,23 @@
  */
 package net.sf.openv4j.testdevice;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import java.util.Arrays;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+
 import net.sf.openv4j.DataPoint;
 import net.sf.openv4j.protocolhandlers.MemoryImage;
-import net.sf.openv4j.protocolhandlers.ProtocolHandler;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * DOCUMENT ME!
@@ -129,7 +128,23 @@ public class KW2Dummy extends MemoryImage {
      * @throws UnsupportedCommOperationException DOCUMENT ME!
      */
     public void openPort(String serialPortName) throws IOException, NoSuchPortException, PortInUseException, UnsupportedCommOperationException {
-        serialPort = ProtocolHandler.openPort(serialPortName);
+        // Obtain a CommPortIdentifier object for the port you want to open.
+        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(serialPortName);
+
+        // Open the port represented by the CommPortIdentifier object. Give
+        // the open call a relatively long timeout of 30 seconds to allow
+        // a different application to reliquish the port if the user
+        // wants to.
+        log.info("open port " + serialPortName);
+
+        serialPort = (SerialPort) portId.open(DataPoint.class.getName(), 30000);
+        log.info("port opend " + serialPortName);
+        serialPort.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_2, SerialPort.PARITY_EVEN);
+        serialPort.enableReceiveTimeout(1000);
+        serialPort.setInputBufferSize(512);
+        serialPort.setOutputBufferSize(512);
+        serialPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
+
         closed = false;
         dt = new DeviceTimings();
         t = new Thread(dt);

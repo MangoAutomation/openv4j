@@ -31,14 +31,6 @@ import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.io.CommPortIdentifier;
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
-
-import net.sf.openv4j.DataPoint;
-
 /**
  * DOCUMENT ME!
  *
@@ -68,40 +60,6 @@ public class ProtocolHandler {
         closed = true;
         Thread.sleep(100); //TODO wait?
         t.interrupt();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param portName DOCUMENT ME!
-     *
-     * @return DOCUMENT ME!
-     *
-     * @throws NoSuchPortException DOCUMENT ME!
-     * @throws PortInUseException DOCUMENT ME!
-     * @throws UnsupportedCommOperationException DOCUMENT ME!
-     * @throws IOException DOCUMENT ME!
-     */
-    public static SerialPort openPort(String portName)
-                               throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException, IOException {
-        // Obtain a CommPortIdentifier object for the port you want to open.
-        CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(portName);
-
-        // Open the port represented by the CommPortIdentifier object. Give
-        // the open call a relatively long timeout of 30 seconds to allow
-        // a different application to reliquish the port if the user
-        // wants to.
-        log.info("open port " + portName);
-
-        SerialPort sPort = (SerialPort) portId.open(DataPoint.class.getName(), 30000);
-        log.info("port opend " + portName);
-        sPort.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_2, SerialPort.PARITY_EVEN);
-        sPort.enableReceiveTimeout(1000);
-        sPort.setInputBufferSize(512);
-        sPort.setOutputBufferSize(512);
-        sPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
-
-        return sPort;
     }
 
     /**

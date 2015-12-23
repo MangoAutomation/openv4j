@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-
 import java.util.Date;
 
 import org.apache.commons.cli.CommandLine;
@@ -44,15 +43,14 @@ import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.SerialPort;
 import gnu.io.UnsupportedCommOperationException;
-
 import net.sf.openv4j.DataPoint;
 import net.sf.openv4j.protocolhandlers.DataContainer;
 import net.sf.openv4j.protocolhandlers.ProtocolHandler;
@@ -215,7 +213,23 @@ public class Main {
         ProtocolHandler protocolHandler = new ProtocolHandler();
 
         try {
-            masterPort = ProtocolHandler.openPort(port);
+        		// Obtain a CommPortIdentifier object for the port you want to open.
+        		CommPortIdentifier portId = CommPortIdentifier.getPortIdentifier(port);
+
+        		// Open the port represented by the CommPortIdentifier object. Give
+        		// the open call a relatively long timeout of 30 seconds to allow
+        		// a different application to reliquish the port if the user
+        		// wants to.
+        		log.info("open port " + port);
+
+        		masterPort = (SerialPort) portId.open(DataPoint.class.getName(), 30000);
+        		log.info("port opend " + port);
+        		masterPort.setSerialPortParams(4800, SerialPort.DATABITS_8, SerialPort.STOPBITS_2, SerialPort.PARITY_EVEN);
+        		masterPort.enableReceiveTimeout(1000);
+        		masterPort.setInputBufferSize(512);
+        		masterPort.setOutputBufferSize(512);
+        		masterPort.setFlowControlMode(SerialPort.FLOWCONTROL_NONE);
+            
             protocolHandler.setStreams(masterPort.getInputStream(), masterPort.getOutputStream());
         } catch (NoSuchPortException ex) {
             log.error(ex.getMessage(), ex);
