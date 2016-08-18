@@ -60,12 +60,12 @@
         <repository>
             <id>openv4j.sf.net</id>
             <name>Mango OpenV4J Repository</name>
-            <url>file://var/www/maven-repo</url>
+            <url>file:///var/www/maven-repo</url>
         </repository>
         <snapshotRepository>
             <id>openv4j.sf.net</id>
             <name>Mango OpenV4J Snapshot Repository</name>
-            <url>file://var/www/maven-repo</url>
+            <url>file:///var/www/maven-repo</url>
         </snapshotRepository>
         <site>
             <id>openv4j.sf.net</id>
