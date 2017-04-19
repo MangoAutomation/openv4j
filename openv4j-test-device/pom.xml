@@ -3,7 +3,7 @@
     <parent>
         <groupId>net.sf.openv4j</groupId>
         <artifactId>openv4j</artifactId>
-        <version>0.1.5-SNAPSHOT</version>
+        <version>0.1.5</version>
     </parent>
     <artifactId>openv-test-device</artifactId>
     <packaging>jar</packaging>

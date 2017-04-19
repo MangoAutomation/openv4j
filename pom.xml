@@ -3,7 +3,7 @@
     <groupId>net.sf.openv4j</groupId>
     <artifactId>openv4j</artifactId>
     <packaging>pom</packaging>
-    <version>0.1.5-SNAPSHOT</version>
+    <version>0.1.5</version>
     <name>openv4j</name>
     <url>http://openv4j.sourceforge.net</url>
     <description>OpenV For Java</description>
