@@ -57,16 +57,14 @@
         <!--
           The server id here defined must also appear in ~/.m2/settings.xml with username
         -->
-        <repository>
-            <id>openv4j.sf.net</id>
-            <name>Mango OpenV4J Repository</name>
-            <url>file:///var/www/maven-repo</url>
-        </repository>
         <snapshotRepository>
-            <id>openv4j.sf.net</id>
-            <name>Mango OpenV4J Snapshot Repository</name>
-            <url>file:///var/www/maven-repo</url>
+            <id>ias-snapshots</id>
+            <url>https://maven.mangoautomation.net/repository/ias-snapshot/</url>
         </snapshotRepository>
+        <repository>
+            <id>ias-release</id>
+            <url>https://maven.mangoautomation.net/repository/ias-release/</url>
+        </repository>
         <site>
             <id>openv4j.sf.net</id>
             <name>OpenV4J Site</name>
@@ -263,6 +261,25 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>appassembler-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+			   <groupId>org.sonatype.plugins</groupId>
+			   <artifactId>nexus-staging-maven-plugin</artifactId>
+			   <version>1.5.1</version>
+			   <executions>
+			      <execution>
+			         <id>default-deploy</id>
+			         <phase>deploy</phase>
+			         <goals>
+			            <goal>deploy</goal>
+			         </goals>
+			      </execution>
+			   </executions>
+			   <configuration>
+			      <serverId>ias-releases</serverId>
+			      <nexusUrl>https://maven.mangoautomation.net/</nexusUrl>
+			      <skipStaging>true</skipStaging>
+			   </configuration>
+			</plugin>
         </plugins>
     </build>
 
